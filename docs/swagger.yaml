@@ -1,0 +1,444 @@
+basePath: /api/v1
+definitions:
+  requests.ImageByLocation:
+    properties:
+      location:
+        minimum: 0
+        type: integer
+      page:
+        type: integer
+    required:
+    - location
+    - page
+    type: object
+  requests.LocationCountry:
+    properties:
+      country:
+        type: string
+    required:
+    - country
+    type: object
+  requests.Login:
+    properties:
+      email_address:
+        type: string
+      password:
+        type: string
+    required:
+    - email_address
+    - password
+    type: object
+  requests.PinCreate:
+    properties:
+      date:
+        type: string
+      is_plan_to_visit:
+        type: boolean
+      location_id:
+        type: integer
+    required:
+    - location_id
+    type: object
+  requests.Register:
+    properties:
+      email_address:
+        type: string
+      fcm_token:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+      password:
+        minLength: 6
+        type: string
+      username:
+        minLength: 3
+        type: string
+    required:
+    - email_address
+    - fcm_token
+    - first_name
+    - last_name
+    - password
+    - username
+    type: object
+host: localhost:8080
+info:
+  description: REST Api of Travel Logger.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: Travel Logger API
+  version: "1.0"
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Allows users to login and generate jwt token
+      parameters:
+      - description: User login credentials
+        in: body
+        name: register
+        required: true
+        schema:
+          $ref: '#/definitions/requests.Login'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: User Login
+      tags:
+      - auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Allows users to register
+      parameters:
+      - description: User registration info
+        in: body
+        name: register
+        required: true
+        schema:
+          $ref: '#/definitions/requests.Register'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: User Registration
+      tags:
+      - auth
+  /image:
+    delete:
+      consumes:
+      - application/json
+      description: Returns image by user id and image id
+      parameters:
+      - description: Image by location id
+        in: body
+        name: imagebylocation
+        required: true
+        schema:
+          $ref: '#/definitions/requests.ImageByLocation'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Delete Image by ID
+      tags:
+      - image
+    get:
+      consumes:
+      - application/json
+      description: Returns images by user id
+      parameters:
+      - in: query
+        name: page
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get Images by User ID
+      tags:
+      - image
+  /image/country:
+    get:
+      consumes:
+      - application/json
+      description: Returns images by user id and country
+      parameters:
+      - in: query
+        name: country
+        required: true
+        type: string
+      - in: query
+        name: page
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get Images by Country
+      tags:
+      - image
+  /image/location:
+    get:
+      consumes:
+      - application/json
+      description: Returns images by user id and location id
+      parameters:
+      - in: query
+        minimum: 0
+        name: location
+        required: true
+        type: integer
+      - in: query
+        name: page
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get Images by Location ID
+      tags:
+      - image
+  /image/upload:
+    post:
+      consumes:
+      - application/json
+      description: Users can upload images
+      parameters:
+      - in: formData
+        name: description
+        type: string
+      - in: formData
+        name: locationID
+        required: true
+        type: integer
+      - in: formData
+        name: place
+        required: true
+        type: string
+      - description: Image File
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Upload Image
+      tags:
+      - image
+  /location/area:
+    get:
+      consumes:
+      - application/json
+      description: Returns area and city list by country
+      parameters:
+      - description: Location Country
+        in: body
+        name: locationcountry
+        required: true
+        schema:
+          $ref: '#/definitions/requests.LocationCountry'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get Area and City List by Country
+      tags:
+      - location
+  /location/city:
+    get:
+      consumes:
+      - application/json
+      description: Returns city list by country
+      parameters:
+      - description: Location Country
+        in: body
+        name: locationcountry
+        required: true
+        schema:
+          $ref: '#/definitions/requests.LocationCountry'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get City List by Country
+      tags:
+      - location
+  /location/country:
+    get:
+      consumes:
+      - application/json
+      description: Returns country list
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get Country List
+      tags:
+      - location
+  /pin:
+    get:
+      consumes:
+      - application/json
+      description: Get pins by user id
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get Pins by User ID
+      tags:
+      - pin
+  /pin/create:
+    post:
+      consumes:
+      - application/json
+      description: Create pin
+      parameters:
+      - description: Pin Create
+        in: body
+        name: pincreate
+        required: true
+        schema:
+          $ref: '#/definitions/requests.PinCreate'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Create Pin
+      tags:
+      - pin
+schemes:
+- http
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
