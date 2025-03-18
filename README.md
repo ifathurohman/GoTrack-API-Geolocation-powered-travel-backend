@@ -1,7 +1,7 @@
 # GoTrack API – Geolocation-powered travel backend 🚀
 
 ## Overview
-Travel Backend is a high-performance backend service built with **Golang** and **PostgreSQL**, designed to power an upcoming travel application. It leverages the **Fiber framework** for efficient request handling, **Gorm** for ORM, and integrates JWT authentication, Swagger documentation, and AWS SDK for enhanced capabilities.
+GoTrack API is a high-performance backend service built with Golang and PostgreSQL, designed to power a next-generation travel application. It leverages the Fiber framework for ultra-fast request handling, Gorm for seamless database management, and JWT authentication for secure user access. Additionally, it features Swagger documentation for API clarity and AWS SDK integration for scalable cloud capabilities, ensuring a robust and efficient travel platform.
 
 ## Tech Stack ⚙️
 - **[Fiber](https://gofiber.io/)** - Fast and lightweight web framework for Golang
